@@ -1,0 +1,20 @@
+/* MSHV
+ *
+ * By Hrisimir Hristov - LZ2HV
+ * May be used under the terms of the GNU General Public License (GPL)
+ */
+
+#ifndef PCR_DEF_H
+#define PCR_DEF_H
+
+#include "../rigdef.h"
+#define PCR_ID 9
+#define PCR_COUNT 4
+static RigSet rigs_pcr[PCR_COUNT] =
+    {
+        {"IC-PCR100",RIG_PTT_NONE,RIG_PORT_SERIAL,9600,38400,8,1,PAR_NONE,FLOW_HARDWARE,12,2,400,3},
+		{"IC-PCR1000",RIG_PTT_NONE,RIG_PORT_SERIAL,9600,38400,8,1,PAR_NONE,FLOW_HARDWARE,12,2,400,3},
+		{"IC-PCR1500",RIG_PTT_NONE,RIG_PORT_SERIAL,9600,38400,8,1,PAR_NONE,FLOW_HARDWARE,0,0,400,3},
+		{"IC-PCR2500",RIG_PTT_NONE,RIG_PORT_SERIAL,9600,38400,8,1,PAR_NONE,FLOW_HARDWARE,0,0,400,3},
+    };
+#endif

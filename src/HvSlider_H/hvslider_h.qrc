@@ -1,0 +1,19 @@
+<!DOCTYPE RCC><RCC version="1.0">
+                           <qresource>
+                           <file>pic/sld_h_track.png</file>
+                           <file>pic/sld_h_left.png</file>
+                           <file>pic/sld_h_right.png</file>
+                           <file>pic/tumb_h_over_play.png</file>
+                           <file>pic/tumb_h_play.png</file>
+						   <file>pic/tumb_h_over_rec.png</file>
+                           <file>pic/tumb_h_rec.png</file>                            
+                           <file>pic/sld_h_track_b.png</file> 
+                           <file>pic/sld_h_left_b.png</file>
+                           <file>pic/sld_h_right_b.png</file> 
+                           <file>pic/tumb_h_over_play_b.png</file>
+                           <file>pic/tumb_h_play_b.png</file>
+						   <file>pic/tumb_h_over_rec_b.png</file>
+                           <file>pic/tumb_h_rec_b.png</file>  
+                           </qresource>  
+                           </RCC>
+

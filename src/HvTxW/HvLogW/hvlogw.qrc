@@ -1,0 +1,11 @@
+<!DOCTYPE RCC><RCC version="1.0">
+                           <qresource> 
+                           <file>pic/new_log.png</file>   
+                           <file>pic/new_log_b.png</file>              
+                           <file>pic/addlog.png</file>  
+                           <file>pic/exportall.png</file>   
+                           <file>pic/exportsel.png</file> 
+                           <file>pic/warning_icon.png</file>  
+                           <file>pic/uploadsel.png</file>   
+                           </qresource>    
+                           </RCC>

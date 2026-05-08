@@ -1,0 +1,8 @@
+<!DOCTYPE RCC><RCC version="1.0">
+                           <qresource>
+                           <file>pic/on.png</file>
+                           <file>pic/clip.png</file>
+                           <file>pic/back.png</file>
+                           </qresource>
+                           </RCC>
+

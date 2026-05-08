@@ -1,0 +1,3 @@
+pngcrush.exe -ow -rem allb -reduce "smenu.png" temp.png
+pngcrush.exe -d -ow -rem allb -reduce *.png
+pngcrush.exe -d 0/ -ow -rem allb -reduce *.png     <-all in new dir=0

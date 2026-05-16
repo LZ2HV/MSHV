@@ -54,6 +54,18 @@ extern "C"
 {
 #endif /* __cplusplus */
 
+#if defined(__APPLE__) && defined(__clang__) && defined(__cplusplus)
+#  ifndef _Complex_I
+#    define _Complex_I (__extension__ 1.0i)
+#  endif
+#  ifndef I
+#    define I _Complex_I
+#  endif
+#  ifndef complex
+#    define complex _Complex
+#  endif
+#endif
+
 /* If <complex.h> is included, use the C99 complex type.  Otherwise
    define a type bit-compatible with C99 complex */
 #if !defined(FFTW_NO_Complex) && defined(_Complex_I) && defined(complex) && defined(I)
@@ -510,5 +522,44 @@ FFTW_DEFINE_API(FFTW_MANGLE_QUAD, __float128, fftwq_complex)
 #ifdef __cplusplus
 }  /* extern "C" */
 #endif /* __cplusplus */
+
+#if defined(__APPLE__) && defined(__clang__) && defined(__cplusplus)
+#ifndef hv_creal_defined
+#define hv_creal_defined
+static inline double hv_creal(double _Complex x) { return __real__ x; }
+#endif
+#ifndef hv_cimag_defined
+#define hv_cimag_defined
+static inline double hv_cimag(double _Complex x) { return __imag__ x; }
+#endif
+#ifndef hv_cabs_defined
+#define hv_cabs_defined
+#include <math.h>
+static inline double hv_cabs(double _Complex x) { return sqrt(__real__ x * __real__ x + __imag__ x * __imag__ x); }
+#endif
+#ifndef hv_conj_defined
+#define hv_conj_defined
+static inline double _Complex hv_conj(double _Complex x) { return __real__ x - __imag__ x * I; }
+#endif
+#ifndef hv_cexp_defined
+#define hv_cexp_defined
+static inline double _Complex hv_cexp(double _Complex x) { double r = exp(__real__ x); return r * (__extension__ cos(__imag__ x) + __extension__ sin(__imag__ x) * I); }
+#endif
+#ifndef creal
+#define creal hv_creal
+#endif
+#ifndef cimag
+#define cimag hv_cimag
+#endif
+#ifndef cabs
+#define cabs hv_cabs
+#endif
+#ifndef conj
+#define conj hv_conj
+#endif
+#ifndef cexp
+#define cexp hv_cexp
+#endif
+#endif
 
 #endif /* FFTW3_H */

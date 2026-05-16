@@ -7,6 +7,12 @@
 #include <algorithm> // zaradi max(
 //#include <unistd.h>
 
+/* fftw_complex is now _Complex double on macOS, so use standard complex ops.
+   cabs, direct assignment, and *= all work natively with _Complex double. */
+#define FCABS(x) cabs(x)
+#define FCASSIGN(x,v) ((x)=(v))
+#define FCMUL(x,v) ((x)*=(v))
+
 using namespace std; // zaradi max(
 
 //static const double IN_SAMPLE_RATE =11025.0;//no inposible hv rawfilter need to be off
@@ -78,10 +84,16 @@ MsCore::MsCore()
     hCapture = NULL;
     is_little_endian = 0;
 #endif
+#if defined _MACOS_
+    is_pulse_a_in = true;
+#endif
 
 #if defined _LINUX_
     //strncpy(rad_sound_state.dev_capt_name, "hw:0,0", SC_SIZE_L); //2.65  default pulse
     strncpy(rad_sound_state.dev_capt_name, "pulse: default", SC_SIZE_L);
+#endif
+#if defined _MACOS_
+    strncpy(rad_sound_state.dev_capt_name, "default", SC_SIZE_L);
 #endif
 #if defined _WIN32_  //Primary Sound Capture Driver or "0"
     strncpy(rad_sound_state.dev_capt_name, "Primary Sound Capture Driver", SC_SIZE_L);//
@@ -112,6 +124,9 @@ MsCore::MsCore()
    	}
 #endif
 #if defined _LINUX_
+    rad_open_sound();
+#endif
+#if defined _MACOS_
     rad_open_sound();
 #endif
 
@@ -178,6 +193,9 @@ void MsCore::close_sound()
     }
 #endif
 #if defined _LINUX_
+    rad_close_sound();
+#endif
+#if defined _MACOS_
     rad_close_sound();
 #endif
 }
@@ -418,6 +436,12 @@ void MsCore::FastResetSoundCardIn_p()// for pure sound cards
         rad_open_sound();
     }
 #endif
+#if defined _MACOS_
+    if (!ftci)
+    {
+        rad_open_sound();
+    }
+#endif
 
     record_app();            //fftw
 
@@ -511,6 +535,13 @@ void MsCore::SetupSettings_(QString dev_in_number,int bpsampl,int latency,int ca
                 if (c_retry>120) break;
             }
         }
+    }
+#endif
+#if defined _MACOS_
+    is_pulse_a_in = true;
+    if (!ftci)
+    {
+        rad_open_sound();
     }
 #endif
 
@@ -690,7 +721,7 @@ void MsCore::decode_fft_size_samples(int *data_mono, int count)
                 sum += val;
             }
 
-            ptWriteFft->samples[ptWriteFft->index] = ((double)data_mono[i]*0.0000390625);//2.70 =0.0000390625 old=0.01
+            FCASSIGN(ptWriteFft->samples[ptWriteFft->index],((double)data_mono[i]*0.0000390625));//2.70 =0.0000390625 old=0.01
             //if (ptWriteFft->index >= fft_size-1)
             //qDebug()<<"ptWriteFft->index"<<ptWriteFft->index;
             if (++(ptWriteFft->index) >= fft_size)
@@ -770,7 +801,7 @@ void MsCore::Get_Graph(int smiter)
         return;
     }
     for (i = 0; i < fft_size; ++i)	// multiply by window
-        ptFft->samples[i] *= fft_window[i];
+        FCMUL(ptFft->samples[i], fft_window[i]);
     //ptFft->samples[i] = ptFft->samples[i]*fft_window[i];
 
     fftw_execute(ptFft->plan_dsp);	// Calculate FFT
@@ -793,13 +824,13 @@ void MsCore::Get_Graph(int smiter)
 c6:
             if (!retry)//2.45
             {
-                fft_avg[k] += cabs(ptFft->samples[i+beg_size]);
+                fft_avg[k] += FCABS(ptFft->samples[i+beg_size]);
             }
             else
             {
                 retry = false;
-                double p0 = cabs(ptFft->samples[i+beg_size]);
-                double p1 = cabs(ptFft->samples[i+beg_size+1]);
+                double p0 = FCABS(ptFft->samples[i+beg_size]);
+                double p1 = FCABS(ptFft->samples[i+beg_size+1]);
                 fft_avg[k] = (p0+p1)/2.0;
             }
             if ((double)i>(double)k*d_koef)// tova pri nedostig
@@ -822,7 +853,7 @@ c6:
         if ( n == 0 ) n=1;//HV za da risuva i pod 20 seconds ina4e n = 0 stava            
         for (i = 0, k = 0; k < s_data_height; ++k)
         {
-            for (j = 0; j < n; ++j) fft_avg[k] += cabs(ptFft->samples[i++]);        	
+            for (j = 0; j < n; ++j) fft_avg[k] += FCABS(ptFft->samples[i++]);         
        	}
     }
     //qDebug()<<"fft_avg="<<k;
@@ -896,6 +927,9 @@ void MsCore::Refresh_t()
             ReadData();
 #endif
 #if defined _LINUX_
+            alsa_read_sound();
+#endif
+#if defined _MACOS_
             alsa_read_sound();
 #endif
         }

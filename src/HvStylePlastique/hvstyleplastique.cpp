@@ -7189,6 +7189,22 @@ void HvStylePlastique::polish(QPalette & pal)
         pal.setBrush(QPalette::Disabled, QPalette::Mid, brush);
         pal.setBrush(QPalette::Disabled, QPalette::Shadow, brush);
     }
+#if defined _MACOS_
+    else
+    {
+        pal.setColor(QPalette::Window, QColor(236,236,236));
+        pal.setColor(QPalette::WindowText, Qt::black);
+        pal.setColor(QPalette::Base, Qt::white);
+        pal.setColor(QPalette::AlternateBase, QColor(245,245,245));
+        pal.setColor(QPalette::Text, Qt::black);
+        pal.setColor(QPalette::Button, QColor(236,236,236));
+        pal.setColor(QPalette::ButtonText, Qt::black);
+        pal.setColor(QPalette::Highlight, QColor(48,140,198));
+        pal.setColor(QPalette::HighlightedText, Qt::white);
+        pal.setColor(QPalette::ToolTipBase, Qt::white);
+        pal.setColor(QPalette::ToolTipText, Qt::black);
+    }
+#endif
 
     HvPublicStyle::polish(pal);
 #ifdef Q_WS_MAC

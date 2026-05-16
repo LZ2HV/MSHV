@@ -1,5 +1,5 @@
 QT += widgets network websockets
-QMAKE_CXXFLAGS += -std=gnu++14 \
+QMAKE_CXXFLAGS += -std=gnu++11 \
  -ffast-math \
  -fno-trapping-math \
  -funsafe-math-optimizations \

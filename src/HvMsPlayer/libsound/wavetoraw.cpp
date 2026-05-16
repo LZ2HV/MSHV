@@ -4,7 +4,11 @@
 
 // Wavetoraw.cc
 // Server which strips wave header.
+#if defined _MACOS_
+#include <stdlib.h>
+#else
 #include <malloc.h>
+#endif
 
 #include "mpegsound.h"
 #include <QMessageBox>

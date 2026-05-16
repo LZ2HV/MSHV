@@ -5,6 +5,12 @@
 #include "cpusensorhv.h"
 //#include <QtGui>
 
+#if defined _MACOS_
+#include <mach/mach.h>
+#include <mach/processor_info.h>
+#include <mach/mach_host.h>
+#endif
+
 #if defined _WIN32_
 int GetProc_Info_(SYSTEM_INFO &sy,LPFN_NtQuerySystemInformation &nt,SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION *xspi_old,SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION *xspi)
 {
@@ -50,6 +56,16 @@ CpuSensorHv::CpuSensorHv(QString cpuN, int cpu_number)
     system=0;
     nice=0;
     idle=0;//2.12
+#endif
+#if defined _MACOS_
+    userTicks=0;
+    sysTicks=0;
+    niceTicks=0;
+    idleTicks=0;
+    user=0;
+    system=0;
+    nice=0;
+    idle=0;
 #endif
 	cpuNbr = cpuN;
 }
@@ -123,6 +139,39 @@ int CpuSensorHv::getCPULoad()
     niceTicks = nTicks;
     idleTicks = iTicks;
     //qDebug()<<"SSSSSSSSSSSSs"<<load;
+    return load;
+#endif
+#if defined _MACOS_
+    natural_t numCPUs;
+    mach_msg_type_number_t numCPUInfo;
+    processor_info_array_t cpuInfo;
+
+    kern_return_t err = host_processor_info(mach_host_self(), PROCESSOR_CPU_LOAD_INFO, &numCPUs, &cpuInfo, &numCPUInfo);
+    if (err != KERN_SUCCESS) return 0;
+
+    long uTicks = 0, sTicks = 0, nTicks = 0, iTicks = 0;
+    for (natural_t i = 0; i < numCPUs; i++) {
+        uTicks += cpuInfo[CPU_STATE_MAX * i + CPU_STATE_USER];
+        sTicks += cpuInfo[CPU_STATE_MAX * i + CPU_STATE_SYSTEM];
+        nTicks += cpuInfo[CPU_STATE_MAX * i + CPU_STATE_NICE];
+        iTicks += cpuInfo[CPU_STATE_MAX * i + CPU_STATE_IDLE];
+    }
+
+    vm_deallocate(mach_task_self(), (vm_address_t)cpuInfo, sizeof(integer_t) * numCPUInfo);
+
+    long totalTicks = ((uTicks - userTicks) + (sTicks - sysTicks) + (nTicks - niceTicks) + (iTicks - idleTicks));
+    int load = (totalTicks == 0) ? 0 : (int)(100.0 * ((uTicks+sTicks+nTicks) - (userTicks+sysTicks+niceTicks)) / (totalTicks+0.001) + 0.5);
+
+    user = (totalTicks == 0) ? 0 : (int)(100.0 * (uTicks - userTicks) / (totalTicks+0.001) + 0.5);
+    idle = (totalTicks == 0) ? 0 : (int)(100.0 * (iTicks - idleTicks) / (totalTicks+0.001) + 0.5);
+    system = (totalTicks == 0) ? 0 : (int)(100.0 * (sTicks - sysTicks) / (totalTicks+0.001) + 0.5);
+    nice = (totalTicks == 0) ? 0 : (int)(100.0 * (nTicks - niceTicks) / (totalTicks+0.001) + 0.5);
+
+    userTicks = uTicks;
+    sysTicks = sTicks;
+    niceTicks = nTicks;
+    idleTicks = iTicks;
+
     return load;
 #endif
 #if defined _WIN32_

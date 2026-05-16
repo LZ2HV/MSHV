@@ -110,9 +110,13 @@ jobs:
       # ----- macOS -----
       - name: Install Qt5 + deps (macOS)
         if: matrix.config.os == 'macos'
+        # boost is required by src/HvMsPlayer/libsound/boost/select_compiler_config.hpp
+        # which references <boost/config/compiler/clang.hpp> by full path — the
+        # bundled boost subset is flat and ships no clang.hpp, so we rely on
+        # the system boost include path under clang.
         run: |
           brew update
-          brew install qt@5 fftw portaudio
+          brew install qt@5 fftw portaudio boost
 
       - name: Build + package (macOS)
         if: matrix.config.os == 'macos'

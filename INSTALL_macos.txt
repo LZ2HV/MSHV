@@ -8,6 +8,6 @@ macOS (Gatekeeper) will block it on first launch.
 
 2. To remove the quarantine flag, open Terminal and run:
 
-    xattr -cr /Applications/MSHV.app
+    sudo xattr -cr /Applications/MSHV.app
 
 After that, the app will launch normally without warnings.

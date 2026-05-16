@@ -17,6 +17,7 @@ CONFIG += qt \
 DESTDIR = bin
 OBJECTS_DIR = build
 MOC_DIR = build
+ICON = macos/MSHV.icns
 
 # macOS uses PortAudio (CoreAudio) instead of ALSA + PulseAudio.
 # QESP_NO_UDEV: keep qextserialport from pulling in libudev.

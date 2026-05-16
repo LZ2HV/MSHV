@@ -118,6 +118,10 @@ if (-not (Test-Path (Join-Path $DistPlatforms "qwindows.dll"))) {
 if ($wdqExit -ne 0 -and -not (Test-Path (Join-Path $DistPlatforms "qwindows.dll"))) {
     throw "windeployqt failed and manual platform plugin copy did not recover"
 }
+# windeployqt's nonzero exit lingers in $LASTEXITCODE even after we recover;
+# the GitHub Actions pwsh shell uses it as the step's final exit code unless
+# we clear it. Reset to 0 now that we know the bundle is valid.
+$global:LASTEXITCODE = 0
 
 @"
 MSHV $Version - Windows x64
@@ -141,3 +145,4 @@ Compress-Archive -Path $DistDir -DestinationPath $Zip -CompressionLevel Optimal
 $SizeMB = [math]::Round((Get-Item $Zip).Length / 1MB, 1)
 Write-Host ""
 Write-Host "==> Release ready: $Zip ($SizeMB MB)"
+exit 0

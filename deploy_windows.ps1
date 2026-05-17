@@ -98,25 +98,63 @@ Write-Host "==> windeployqt MSHV.exe"
 & $WindeployQt --release --no-translations --no-system-d3d-compiler --no-opengl-sw "$DistDir\MSHV.exe"
 $wdqExit = $LASTEXITCODE
 
-# windeployqt sometimes prints "Unable to find the platform plugin" even
-# when the Qt install is intact (it happens when its qmake probe doesn't
-# match the install layout). Fall back to copying qwindows.dll by hand so
-# the bundle is functional regardless.
-$DistPlatforms = Join-Path $DistDir "platforms"
-if (-not (Test-Path (Join-Path $DistPlatforms "qwindows.dll"))) {
-    Write-Host "==> Platform plugin not deployed — copying qwindows.dll manually"
+# windeployqt aborts on "Unable to find the platform plugin" without copying
+# anything — not even the Qt5*.dll runtimes it just announced as "To be
+# deployed". Detect that and do a full manual copy from $QtRoot. The module
+# list mirrors `QT += widgets axcontainer network websockets` in
+# MSHV_WIN64.pro plus the MinGW C++ runtime DLLs Qt was built against.
+if (-not (Test-Path (Join-Path $DistDir "Qt5Core.dll"))) {
+    Write-Host "==> windeployqt did not deploy runtime DLLs — copying manually"
+    $QtBin = Join-Path $QtRoot "bin"
+
+    $QtDlls = @(
+        "Qt5Core.dll", "Qt5Gui.dll", "Qt5Widgets.dll",
+        "Qt5Network.dll", "Qt5WebSockets.dll",
+        "Qt5AxContainer.dll", "Qt5AxBase.dll"
+    )
+    foreach ($dll in $QtDlls) {
+        $src = Join-Path $QtBin $dll
+        if (Test-Path $src) {
+            Copy-Item $src $DistDir
+        } else {
+            Write-Host "    (skipping $dll — not present in Qt install)"
+        }
+    }
+
+    # MinGW C++ runtime — these live next to qmake.exe.
+    $RuntimeDlls = @("libgcc_s_seh-1.dll", "libstdc++-6.dll", "libwinpthread-1.dll")
+    foreach ($dll in $RuntimeDlls) {
+        $src = Join-Path $QtBin $dll
+        if (Test-Path $src) { Copy-Item $src $DistDir }
+        else { throw "Required MinGW runtime $dll not found at $src" }
+    }
+
+    # Plugins. platforms/qwindows.dll is mandatory — without it the app
+    # refuses to start. styles + imageformats are nice-to-haves for native
+    # look-and-feel and PNG/JPEG/ICO support; copy if present.
+    $DistPlatforms = Join-Path $DistDir "platforms"
+    New-Item -ItemType Directory -Force -Path $DistPlatforms | Out-Null
     $qwindows = Join-Path $PlatformsDir "qwindows.dll"
     if (-not (Test-Path $qwindows)) { throw "qwindows.dll not found at $qwindows" }
-    New-Item -ItemType Directory -Force -Path $DistPlatforms | Out-Null
     Copy-Item $qwindows $DistPlatforms
-    # qt.conf tells the binary plugins live in .\plugins next to the exe.
-    # windeployqt uses a flat layout (platforms/ is a sibling of MSHV.exe),
-    # which the default Qt search already covers — qt.conf is belt-and-braces.
+
+    foreach ($subdir in @("styles", "imageformats")) {
+        $srcDir = Join-Path $PluginsDir $subdir
+        if (Test-Path $srcDir) {
+            $dstDir = Join-Path $DistDir $subdir
+            New-Item -ItemType Directory -Force -Path $dstDir | Out-Null
+            Copy-Item (Join-Path $srcDir "*.dll") $dstDir
+        }
+    }
+
+    # qt.conf — tells the binary plugins live next to the exe rather than
+    # in some baked-in absolute path. Belt-and-braces; the default search
+    # would find them anyway in this flat layout.
     "[Paths]`nPlugins = ." | Set-Content -Path (Join-Path $DistDir "qt.conf") -Encoding ASCII
 }
 
-if ($wdqExit -ne 0 -and -not (Test-Path (Join-Path $DistPlatforms "qwindows.dll"))) {
-    throw "windeployqt failed and manual platform plugin copy did not recover"
+if (-not (Test-Path (Join-Path $DistDir "Qt5Core.dll"))) {
+    throw "Qt5Core.dll missing from bundle after recovery — aborting"
 }
 # windeployqt's nonzero exit lingers in $LASTEXITCODE even after we recover;
 # the GitHub Actions pwsh shell uses it as the step's final exit code unless

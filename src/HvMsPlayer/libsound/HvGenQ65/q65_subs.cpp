@@ -31,6 +31,7 @@
 //#include <QtGui>
 #include "q65_subs.h"
 #include <stdio.h>
+#include <stdlib.h>
 #include <math.h>
 #include <memory.h>
  

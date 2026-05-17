@@ -15,6 +15,19 @@
 
 #include <numeric>
 using namespace std; // zaradi max(
+static int hv_pthread_create_decoder(pthread_t *t, void *(*start)(void*), void *arg)
+{
+#if defined _MACOS_
+    pthread_attr_t a;
+    pthread_attr_init(&a);
+    pthread_attr_setstacksize(&a, 16 * 1024 * 1024);
+    int rc = pthread_create(t, &a, start, arg);
+    pthread_attr_destroy(&a);
+    return rc;
+#else
+    return pthread_create(t, NULL, start, arg);
+#endif
+}
 static const double DEC_SAMPLE_RATE_11025 = 11025.0;
 static const double DEC_SAMPLE_RATE_12000 = 12000.0;
 //#include <QtGui>
@@ -2756,7 +2769,7 @@ void DecoderMs::SetDecode(int *raw,int count_q,QString time,int t_istart,int mou
         //2.56 stop thr_only_one_color = true;
         //s_f00=2000;
         //s_f01=2600;
-        pthread_create(&th,NULL,DecoderMs::ThreadDecode,(void*)this);
+        hv_pthread_create_decoder(&th,DecoderMs::ThreadDecode,(void*)this);
         //pthread_attr_destroy(&thread_attr);
     }
     else
@@ -2839,11 +2852,11 @@ void DecoderMs::SetDecode(int *raw,int count_q,QString time,int t_istart,int mou
             //qDebug()<<"D6="<<_f05_<<_f06_<<_f06_-_f05_;
         }
         //2.41 important to be here for slow speed PCs
-        pthread_create(&th0,NULL,DecoderMs::ThrDec0,(void*)this);
-        pthread_create(&th1,NULL,DecoderMs::ThrDec1,(void*)this);
-        if (nthr>2) pthread_create(&th2,NULL,DecoderMs::ThrDec2,(void*)this);
-        if (nthr>3) pthread_create(&th3,NULL,DecoderMs::ThrDec3,(void*)this);
-        if (nthr>4) pthread_create(&th4,NULL,DecoderMs::ThrDec4,(void*)this);
-        if (nthr>5) pthread_create(&th5,NULL,DecoderMs::ThrDec5,(void*)this);
+        hv_pthread_create_decoder(&th0,DecoderMs::ThrDec0,(void*)this);
+        hv_pthread_create_decoder(&th1,DecoderMs::ThrDec1,(void*)this);
+        if (nthr>2) hv_pthread_create_decoder(&th2,DecoderMs::ThrDec2,(void*)this);
+        if (nthr>3) hv_pthread_create_decoder(&th3,DecoderMs::ThrDec3,(void*)this);
+        if (nthr>4) hv_pthread_create_decoder(&th4,DecoderMs::ThrDec4,(void*)this);
+        if (nthr>5) hv_pthread_create_decoder(&th5,DecoderMs::ThrDec5,(void*)this);
     }
 }

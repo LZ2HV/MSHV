@@ -1,5 +1,5 @@
 QT += widgets network websockets
-QMAKE_CXXFLAGS += -std=gnu++14 \
+QMAKE_CXXFLAGS += -std=gnu++11 \
  -ffast-math \
  -fno-trapping-math \
  -funsafe-math-optimizations \
@@ -17,6 +17,7 @@ CONFIG += qt \
 DESTDIR = bin
 OBJECTS_DIR = build
 MOC_DIR = build
+ICON = macos/MSHV.icns
 
 # macOS uses PortAudio (CoreAudio) instead of ALSA + PulseAudio.
 # QESP_NO_UDEV: keep qextserialport from pulling in libudev.

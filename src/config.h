@@ -28,6 +28,9 @@
 #if defined _LINUX_
 #define APP_NAME "MSHV version " VER_MS    //c11++ intervaly -> "MSHV version " VER_MS
 #endif
+#if defined _MACOS_
+#define APP_NAME "MSHV version " VER_MS " macOS"
+#endif
 
 #define DATA_HEIGHT         150
 #define DATA_WIDTH          780   //1.39 max 30sHdisplays=780 1.35 15-60s=780*2

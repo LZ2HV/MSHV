@@ -1,0 +1,12 @@
+build/
+bin/
+Makefile
+*.o
+*.moc
+moc_*.cpp
+moc_*.o
+qrc_*.cpp
+qrc_*.o
+mshv_plugin_import.cpp
+.DS_Store
+MSHV.dmg

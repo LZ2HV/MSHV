@@ -13,6 +13,9 @@
 #include <QDesktopWidget>
 #include <QDesktopServices>
 #include <QMimeData>  // For QT5
+#if defined _MACOS_
+#include <QStandardPaths>
+#endif
 
 #define _CONT_NAME_
 #include "config_str_con.h"
@@ -24,9 +27,69 @@
 QTranslator _translator_;
 static int lid = 0;
 static int styid = 0;
+#if defined _MACOS_
+static QString g_mshv_data_path;
+static bool g_mshv_data_initialized = false;
+static void InitMshvDataPath()
+{
+    if (g_mshv_data_initialized) return;
+    g_mshv_data_initialized = true;
+    g_mshv_data_path = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    QDir().mkpath(g_mshv_data_path);
+    QString bundle_path = QCoreApplication::applicationDirPath();
+    QStringList subdirs;
+    subdirs << "settings" << "settings/database" << "settings/resources"
+            << "settings/resources/url_help" << "settings/resources/url_help/en"
+            << "settings/resources/url_help/ru"
+            << "settings/resources/translations"
+            << "log" << "AllTxtMonthly" << "RxWavs" << "Screenshots";
+    for (int i = 0; i < subdirs.count(); ++i)
+        QDir().mkpath(g_mshv_data_path + "/" + subdirs[i]);
+    QStringList resources;
+    resources << "settings/database/cty.dat" << "settings/database/msbcn_db.dbbn"
+              << "settings/database/msloc_db.dbmh"
+              << "settings/database/msloc_db_jt65_deep_search.dbmh"
+              << "settings/database/msloc_db_mshv_original.dbmh"
+              << "settings/database/mstn_db.dbtn"
+              << "settings/database/sat.dat" << "settings/database/tsil.3q"
+              << "settings/azel.dat"
+              << "settings/resources/url_help/en/help_en.html"
+              << "settings/resources/url_help/ru/help_ru.html";
+    for (int i = 0; i < resources.count(); ++i)
+    {
+        QString dst = g_mshv_data_path + "/" + resources[i];
+        QString src = bundle_path + "/" + resources[i];
+        if (!QFile::exists(dst) && QFile::exists(src))
+            QFile::copy(src, dst);
+    }
+    QString font_src_dir = bundle_path + "/settings/font";
+    QString font_dst_dir = g_mshv_data_path + "/settings/font";
+    if (QDir(font_src_dir).exists())
+    {
+        QDir().mkpath(font_dst_dir);
+        QStringList font_files = QDir(font_src_dir).entryList(QDir::Files);
+        for (int i = 0; i < font_files.count(); ++i)
+        {
+            QString dst = font_dst_dir + "/" + font_files[i];
+            if (!QFile::exists(dst))
+                QFile::copy(font_src_dir + "/" + font_files[i], dst);
+        }
+    }
+}
+QString GetMshvDataPath()
+{
+    InitMshvDataPath();
+    return g_mshv_data_path;
+}
+#else
+QString GetMshvDataPath()
+{
+    return QCoreApplication::applicationDirPath();
+}
+#endif
 void _ReadSSAndSet_()
 {
-    QString app_p = (QCoreApplication::applicationDirPath());
+    QString app_p = GetMshvDataPath();
     QFile file(app_p+"/settings/ms_start");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) return;
     QString langid = "0";
@@ -153,7 +216,7 @@ Main_Ms::Main_Ms(QString inst0,QWidget * parent)
     f_rx_glob_ = false;
 
     setWindowTitle(APP_NAME + InstName);  //qDebug()<<QCoreApplication::applicationName();
-    App_Path = (QCoreApplication::applicationDirPath());
+    App_Path = GetMshvDataPath();
 
     dsty = false;
     if (styid==1) dsty = true;

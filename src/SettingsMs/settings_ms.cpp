@@ -7,6 +7,10 @@
 
 //#include <QtGui>
 
+#if defined _MACOS_
+#include <portaudio.h>
+#endif
+
 #if defined _WIN32_
 QString ConvertToStr_t(LPCTSTR name)
 {
@@ -680,6 +684,29 @@ next_card:
 
     //no_emit = false;
 #endif
+#if defined _MACOS_
+    {
+        if (Pa_Initialize() == paNoError)
+        {
+            int numDevices = Pa_GetDeviceCount();
+            for (int i = 0; i < numDevices; ++i)
+            {
+                const PaDeviceInfo *info = Pa_GetDeviceInfo(i);
+                if (!info) continue;
+                QString name = QString::fromUtf8(info->name);
+                if (info->maxInputChannels  > 0) DevBoxIn->addItem(name);
+                if (info->maxOutputChannels > 0) DevBoxOut->addItem(name);
+            }
+        }
+        if (DevBoxIn->count()<1 || DevBoxOut->count()<1)
+        {
+            QMessageBox::critical(this, "MSHV",
+                                  "No sound device detected\n"
+                                  "Close application and install\nsoundcard driver please.",
+                                  QMessageBox::Close);
+        }
+    }
+#endif
     //tci
     DevBoxIn->addItem("TCI Client Input");
     DevBoxOut->addItem("TCI Client Output");
@@ -845,6 +872,9 @@ void SettingsMs::OutDeviceChanged(QString)
         //qDebug()<<"OutDeviceChanged="<<card_out;
         //dev_out mast bi in numbers
 #endif
+#if defined _MACOS_
+        emit OutDevChanged(DevBoxOut->currentText(),b0.toInt(),OutBuf->currentText().toInt());
+#endif
     }
 }
 void SettingsMs::InChannelChanget(bool)
@@ -906,6 +936,12 @@ void SettingsMs::InDeviceChanged(QString)
                           CardBufferPolls->currentText().toInt(),(int)rb_right_ch->isChecked(),SB_Refresh->value(),
                           SB_Refresh_lm->value());
         // qDebug()<<DevBoxIn->currentIndex()<<"OOO"<<DevHandles[DevBoxIn->currentIndex()];
+#endif
+#if defined _MACOS_
+        emit InDevChanged(DevBoxIn->currentText(),b0.toInt(),
+                          CardLatency->currentText().toInt(),
+                          CardBufferPolls->currentText().toInt(),(int)rb_right_ch->isChecked(),SB_Refresh->value(),
+                          SB_Refresh_lm->value());
 #endif
         //}
     }

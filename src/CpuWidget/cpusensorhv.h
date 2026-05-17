@@ -58,6 +58,16 @@ private:
     int idle;
     void getTicks(long &u,long &s,long &n,long &i);
 #endif
+#if defined _MACOS_
+    long userTicks;
+    long sysTicks;
+    long niceTicks;
+    long idleTicks;
+    int user;
+    int system;
+    int nice;
+    int idle;
+#endif
     QString cpuNbr;
     int cpu_num;// for windows
 #if defined _WIN32_

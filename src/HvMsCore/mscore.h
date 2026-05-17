@@ -274,6 +274,18 @@ private:
     bool is_pulse_a_in;
     
 #endif
+#if defined _MACOS_
+    int alsa_read_sound();
+    void rad_close_sound();
+    void rad_open_sound();
+    int sample_bytes;
+    int channel_I;
+    int channel_Q;
+    int cSamples_l[SAMP_BUFFER_SIZE+1000];
+    int cSamples_r[SAMP_BUFFER_SIZE+1000];
+    int quisk_overrange;
+    bool is_pulse_a_in;
+#endif
     int s_count_resample;
     double s_in_level;    
     HvRawFilter *THvRawFilter0;

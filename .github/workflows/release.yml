@@ -1,0 +1,280 @@
+name: Release
+
+# Three trigger paths (modeled on openhpsdr-zeus/release.yml):
+#   1. push of a v*.*.* tag                 → full release (build + publish to GitHub Releases)
+#   2. manual workflow_dispatch (draft=off) → dry-run build only (artifacts on the run page,
+#                                             version suffixed with -dryrun.<sha>)
+#   3. manual workflow_dispatch (draft=on)  → DRAFT GitHub Release (maintainers only). Same
+#                                             version as the in-tree Info.plist — no dryrun
+#                                             suffix — so the bits you smoke-test are
+#                                             byte-for-byte what would ship if you publish.
+#
+# The same matrix builds installers for macOS (DMG), Linux (tar.gz) and
+# Windows (zip). 'create-release' is gated on is-release='true', which is
+# set by determine-version in modes 1 and 3 only.
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+    inputs:
+      draft:
+        description: 'Publish as a DRAFT GitHub Release (visible only to maintainers, no -dryrun.<sha> suffix). Leave unchecked for a regular dry-run that only uploads artifacts to the run page.'
+        type: boolean
+        required: false
+        default: false
+
+jobs:
+  determine-version:
+    name: Determine version
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.parse.outputs.version }}
+      is-release: ${{ steps.parse.outputs.is-release }}
+      is-draft: ${{ steps.parse.outputs.is-draft }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Parse version
+        id: parse
+        env:
+          # workflow_dispatch boolean inputs arrive as the strings "true"/"false";
+          # plumb through env so the bash conditional below stays readable.
+          DISPATCH_DRAFT: ${{ github.event.inputs.draft }}
+        run: |
+          IS_DRAFT="false"
+          if [[ "$GITHUB_REF_TYPE" == "tag" ]]; then
+            # Tag push — strict release path.
+            if [[ ! "$GITHUB_REF_NAME" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+              echo "::error::Tag '$GITHUB_REF_NAME' does not match vMAJOR.MINOR.PATCH (e.g. v2.76.8)."
+              exit 1
+            fi
+            git fetch origin main --depth=0 2>/dev/null || git fetch origin main
+            TAG_SHA=$(git rev-parse "$GITHUB_REF_NAME^{commit}")
+            if ! git merge-base --is-ancestor "$TAG_SHA" origin/main; then
+              echo "::error::Tag '$GITHUB_REF_NAME' (commit $TAG_SHA) is not reachable from origin/main. Releases must be tagged from main."
+              exit 1
+            fi
+            VERSION="${GITHUB_REF_NAME#v}"
+            IS_RELEASE="true"
+            echo "Tagged release $GITHUB_REF_NAME → version $VERSION"
+          elif [[ "$GITHUB_EVENT_NAME" == "workflow_dispatch" && "$DISPATCH_DRAFT" == "true" ]]; then
+            # Manual dispatch with draft=true — produce a DRAFT GitHub Release
+            # using the in-tree Info.plist version verbatim. The draft is only
+            # visible to maintainers until someone clicks "Publish release".
+            VERSION=$(grep -A1 'CFBundleShortVersionString' macos/Info.plist | sed -n 's:.*<string>\(.*\)</string>.*:\1:p' | head -1)
+            VERSION="${VERSION:-0.0.0}"
+            IS_RELEASE="true"
+            IS_DRAFT="true"
+            echo "Draft release dispatch (ref=$GITHUB_REF) → version $VERSION (draft=true)"
+          else
+            # Manual dispatch (draft=false) — dry-run path. Suffix the in-tree
+            # version with dryrun.<sha> so artifact names don't collide with a
+            # real release.
+            VERSION=$(grep -A1 'CFBundleShortVersionString' macos/Info.plist | sed -n 's:.*<string>\(.*\)</string>.*:\1:p' | head -1)
+            VERSION="${VERSION:-0.0.0}"
+            SHORT_SHA="${GITHUB_SHA:0:7}"
+            VERSION="${VERSION}-dryrun.${SHORT_SHA}"
+            IS_RELEASE="false"
+            echo "Dry-run build (trigger=$GITHUB_EVENT_NAME ref=$GITHUB_REF) → version $VERSION"
+          fi
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+          echo "is-release=${IS_RELEASE}" >> "$GITHUB_OUTPUT"
+          echo "is-draft=${IS_DRAFT}" >> "$GITHUB_OUTPUT"
+
+  build-release:
+    name: Build (${{ matrix.config.os }})
+    needs: determine-version
+    runs-on: ${{ matrix.config.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - os: macos
+            runner: macos-latest  # Apple Silicon
+            artifact: macos-arm64-dmg
+          - os: linux
+            # Pinned to ubuntu-22.04 (glibc 2.35) so the binary still launches
+            # on Debian 12 / Ubuntu 22.04 hosts. Match what zeus does.
+            runner: ubuntu-22.04
+            artifact: linux-x64-tarball
+          - os: windows
+            runner: windows-latest
+            artifact: windows-x64-zip
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # ----- macOS -----
+      - name: Install Qt5 + deps (macOS)
+        if: matrix.config.os == 'macos'
+        # boost is required by src/HvMsPlayer/libsound/boost/select_compiler_config.hpp
+        # which references <boost/config/compiler/clang.hpp> by full path — the
+        # bundled boost subset is flat and ships no clang.hpp, so we rely on
+        # the system boost include path under clang.
+        run: |
+          brew update
+          brew install qt@5 fftw portaudio boost
+
+      - name: Build + package (macOS)
+        if: matrix.config.os == 'macos'
+        run: |
+          set -eux
+          bash compile.sh
+          bash deploy_macos.sh
+          mkdir -p dist
+          mv MSHV.dmg "dist/MSHV-${{ needs.determine-version.outputs.version }}-macos-arm64.dmg"
+
+      - name: Upload macOS artifact
+        if: matrix.config.os == 'macos'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.config.artifact }}
+          path: dist/MSHV-${{ needs.determine-version.outputs.version }}-macos-arm64.dmg
+          if-no-files-found: error
+
+      # ----- Linux -----
+      - name: Install Qt5 + deps (Linux)
+        if: matrix.config.os == 'linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            qtbase5-dev qt5-qmake libqt5websockets5-dev libqt5network5 \
+            libfftw3-dev libasound2-dev libpulse-dev \
+            build-essential
+
+      - name: Build + package (Linux)
+        if: matrix.config.os == 'linux'
+        run: bash deploy_linux.sh "${{ needs.determine-version.outputs.version }}"
+
+      - name: Upload Linux artifact
+        if: matrix.config.os == 'linux'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.config.artifact }}
+          path: dist/MSHV-${{ needs.determine-version.outputs.version }}-linux-x86_64.tar.gz
+          if-no-files-found: error
+
+      # ----- Windows -----
+      # MSHV_WIN64.pro is a MinGW build that links a prebuilt static FFTW
+      # built against gcc 7.3.0. mingw81 (gcc 8.1.0) is the closest available
+      # via aqtinstall and is ABI-compatible for C libs like FFTW.
+      - name: Install Qt5 + MinGW (Windows)
+        if: matrix.config.os == 'windows'
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: '5.15.2'
+          host: 'windows'
+          target: 'desktop'
+          arch: 'win64_mingw81'
+          tools: 'tools_mingw,qt.tools.win64_mingw810'
+          cache: true
+
+      - name: Add MinGW to PATH (Windows)
+        if: matrix.config.os == 'windows'
+        shell: pwsh
+        run: |
+          # install-qt-action installs MinGW under <IQTA_TOOLS>\mingw810_64\bin.
+          $mingwBin = Join-Path $env:IQTA_TOOLS "mingw810_64\bin"
+          if (-not (Test-Path $mingwBin)) {
+            throw "MinGW not found at $mingwBin"
+          }
+          Add-Content -Path $env:GITHUB_PATH -Value $mingwBin
+          Write-Host "Added $mingwBin to PATH"
+
+      - name: Build + package (Windows)
+        if: matrix.config.os == 'windows'
+        shell: pwsh
+        run: ./deploy_windows.ps1 -Version "${{ needs.determine-version.outputs.version }}"
+
+      - name: Upload Windows artifact
+        if: matrix.config.os == 'windows'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.config.artifact }}
+          path: dist/MSHV-${{ needs.determine-version.outputs.version }}-windows-x64.zip
+          if-no-files-found: error
+
+  create-release:
+    name: Create GitHub Release
+    needs: [determine-version, build-release]
+    if: needs.determine-version.outputs.is-release == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Determine version
+        id: version
+        run: |
+          VERSION="${{ needs.determine-version.outputs.version }}"
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+          echo "tag=v${VERSION}" >> "$GITHUB_OUTPUT"
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: release-artifacts
+
+      - name: Display artifact structure
+        run: ls -R release-artifacts
+
+      - name: Create Release Notes
+        run: |
+          cat > release-notes.md << EOF
+          # MSHV v${{ steps.version.outputs.version }}
+
+          Cross-platform amateur radio digital modes (MSK144, FT8, FT4, JT65, Q65, …).
+
+          ## Downloads
+
+          ### macOS (Apple Silicon)
+          - **MSHV-${{ steps.version.outputs.version }}-macos-arm64.dmg**
+
+          After mounting the DMG, drag MSHV.app to /Applications. The app is
+          not signed by a registered Apple Developer; if Gatekeeper blocks the
+          first launch run:
+          \`\`\`bash
+          xattr -cr /Applications/MSHV.app
+          \`\`\`
+
+          ### Linux (x86_64)
+          - **MSHV-${{ steps.version.outputs.version }}-linux-x86_64.tar.gz**
+
+          Extract and run \`./run-mshv.sh\`. Built on Ubuntu 22.04
+          (glibc 2.35); should run on Debian 12 / Ubuntu 22.04+ / RHEL 9+.
+          Requires Qt5 + FFTW + ALSA + PulseAudio at runtime — see INSTALL.txt
+          in the tarball.
+
+          ### Windows (x64)
+          - **MSHV-${{ steps.version.outputs.version }}-windows-x64.zip**
+
+          Unzip anywhere and double-click MSHV.exe. Bundled Qt5 + MinGW
+          runtime; FFTW and DirectSound are statically linked. Not signed —
+          SmartScreen may need a "More info → Run anyway" click on first launch.
+
+          ## License
+
+          GNU GPL v2 or later — see [COPYING.txt](https://github.com/${{ github.repository }}/blob/main/COPYING.txt).
+          EOF
+
+      - name: Create or Update Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.version.outputs.tag }}
+          name: MSHV v${{ steps.version.outputs.version }}
+          body_path: release-notes.md
+          # Draft mode is set by determine-version when triggered via
+          # workflow_dispatch with draft=true. Tag-push releases publish
+          # immediately (is-draft="false" in that path).
+          draft: ${{ needs.determine-version.outputs.is-draft == 'true' }}
+          prerelease: false
+          files: |
+            release-artifacts/macos-arm64-dmg/*
+            release-artifacts/linux-x64-tarball/*
+            release-artifacts/windows-x64-zip/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

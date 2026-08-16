@@ -231,13 +231,8 @@ qint64 QextSerialPortPrivate::writeData_sys(const char *data, qint64 maxSize)
 
 static void setBaudRate2Termios(termios *config, int baudRate)
 {
-#ifdef CBAUD
-    config->c_cflag &= (~CBAUD);
-    config->c_cflag |= baudRate;
-#else
     ::cfsetispeed(config, baudRate);
     ::cfsetospeed(config, baudRate);
-#endif
 }
 
 /*

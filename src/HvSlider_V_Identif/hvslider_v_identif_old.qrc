@@ -1,0 +1,30 @@
+<!DOCTYPE RCC><RCC version="1.0">
+                           <qresource>
+                           <file>pic/sld_track_v_si.png</file>
+                           <file>pic/sld_up_v_si.png</file>
+                           <file>pic/sld_down_v_si.png</file>                           
+                       <!--<file>pic/tumb_v_si_p.png</file>
+                           <file>pic/tumb_over_v_si_p.png</file>
+                           <file>pic/tumb_v_si_c.png</file>
+                           <file>pic/tumb_over_v_si_c.png</file>-->                           
+                           <file>pic/tumb_v_si_pc.png</file>
+                           <file>pic/tumb_over_v_si_pc.png</file>    
+                           <file>pic/bw/sl_v_track.png</file>
+                           <file>pic/bw/sl_v_down.png</file>
+                           <file>pic/bw/sl_v_up.png</file>
+                           <file>pic/bw/tumb_v_rec.png</file>
+                           <file>pic/bw/tumb_v_over_rec.png</file>  
+                           <file>pic/bw/tumb_v_play.png</file>
+                           <file>pic/bw/tumb_v_over_play.png</file>                             
+                           <file>pic/big/sld_track_v_si.png</file>
+                           <file>pic/big/sld_up_v_si.png</file>
+                           <file>pic/big/sld_down_v_si.png</file>
+                           <file>pic/big/tumb_v_si_p.png</file>
+                           <file>pic/big/tumb_over_v_si_p.png</file>
+                           <file>pic/big/tumb_v_si_c.png</file>
+                           <file>pic/big/tumb_over_v_si_c.png</file>
+                           <file>pic/big/tumb_v_si_pc.png</file>
+                           <file>pic/big/tumb_over_v_si_pc.png</file>                                                                    
+                           </qresource>
+                           </RCC> 
+

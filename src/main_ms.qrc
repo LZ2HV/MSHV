@@ -1,0 +1,52 @@
+<!DOCTYPE RCC><RCC version="1.0">
+                           <qresource> 
+                           <file>pic/mshv_splash.png</file>   
+                           <file>pic/fileopen.png</file>  
+                           <file>pic/settings.png</file>   
+                           <file>pic/com_p.png</file>   
+                           <file>pic/ms_ico.png</file>       
+                           <file>pic/macro.png</file>  
+                           <file>pic/save_file.png</file>
+                           <file>pic/mixer_rec.png</file> 
+                           <file>pic/mixer_play.png</file>
+                           <file>pic/sine.png</file> 
+                           <file>pic/sync_ot.png</file>
+                           <file>pic/sync_st.png</file> 
+                           <file>pic/key.png</file>    
+                           <file>pic/exit.png</file>  
+                           <file>pic/log.png</file> 
+                           <file>pic/setdb.png</file>
+                           <file>pic/help.png</file>   
+                           <file>pic/txt_color.png</file>
+                           <file>pic/radionet.png</file> 
+                           <file>pic/pal_edit.png</file>  
+                           <file>pic/ms_proc.png</file>
+                           <file>pic/bcn_list.png</file> 
+                           <file>pic/spot_dx.png</file>  
+                           <file>pic/slid_agres.png</file>     
+                           <file>pic/clr_all.png</file>    
+                           <file>pic/clr_sel.png</file> 
+                           <file>pic/fonts.png</file>
+						   <file>pic/smenu.png</file> 
+						   <file>pic/filters.png</file> 
+						   <file>pic/rad_freq.png</file> 
+						   <file>HvTranslations/mshv_bg.qm</file>
+						   <file>HvTranslations/mshv_ru.qm</file> 
+						   <file>HvTranslations/mshv_zh.qm</file>
+						   <file>HvTranslations/mshv_zhhk.qm</file>  
+						   <file>HvTranslations/mshv_eses.qm</file>
+						   <file>HvTranslations/mshv_caes.qm</file>    
+						   <file>HvTranslations/mshv_ptpt.qm</file>
+						   <file>HvTranslations/mshv_roro.qm</file>
+						   <file>HvTranslations/mshv_dadk.qm</file>    
+						   <file>HvTranslations/mshv_plpl.qm</file> 
+						   <file>HvTranslations/mshv_frfr.qm</file>
+						   <file>HvTranslations/mshv_ptbr.qm</file> 
+						   <file>HvTranslations/mshv_nbno.qm</file> 
+						   <file>HvTranslations/mshv_itit.qm</file>
+						   <file>HvTranslations/mshv_cscz.qm</file>						   
+                           </qresource>                                     
+                           </RCC>  
+                           
+                           
+                                           

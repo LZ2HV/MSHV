@@ -1,0 +1,6 @@
+<!DOCTYPE RCC><RCC version="1.0">
+                           <qresource>
+                           <file>pic/progress_on_v12.png</file> 
+                           <file>pic/progress_off_v12.png</file>  
+                           </qresource>
+                           </RCC> 

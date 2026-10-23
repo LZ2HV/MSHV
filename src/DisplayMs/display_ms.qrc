@@ -1,0 +1,13 @@
+<!DOCTYPE RCC><RCC version="1.0">
+                           <qresource> 
+                           <file>pic/palette_default_bw.png</file>
+                           <file>pic/palette_default_c.png</file>
+                           <file>pic/palette_1.png</file>
+                           <file>pic/palette_2.png</file>
+                           <file>pic/palette_3.png</file>         
+                           <file>pic/palette_4.png</file>   
+                           <file>pic/palette_5.png</file>   
+                           <file>pic/palette_6.png</file>                  
+                           </qresource>           
+                           </RCC>      
+ 

@@ -1,0 +1,14 @@
+his_call_tx=
+my_qrg_tx=345
+tx_fi=1
+mon_call1=
+mon_call2=
+def_radec=0#0
+def_multi_answer=6#1#3#0#1#0#0#1#1#1#1#0##
+def_cont_v1_txsn=1
+def_cont_v2_txsn=4
+def_cabrillo_log_set=None#########
+def_use_adif_save=1
+log_qsos_limit_gt9999_lt500001=50000
+add_to_log_prop_all=None#None#B#446426565#0#
+mam_shf=0#1

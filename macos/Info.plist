@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleExecutable</key>
+    <string>MSHV</string>
+    <key>CFBundleIconFile</key>
+    <string>MSHV.icns</string>
+    <key>CFBundleIdentifier</key>
+    <string>org.lz2hv.MSHV</string>
+    <key>CFBundleName</key>
+    <string>MSHV</string>
+    <key>CFBundleDisplayName</key>
+    <string>MSHV</string>
+    <key>CFBundleVersion</key>
+    <string>2.76.6</string>
+    <key>CFBundleShortVersionString</key>
+    <string>2.76.6</string>
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
+    <key>CFBundleSignature</key>
+    <string>????</string>
+    <key>LSMinimumSystemVersion</key>
+    <string>11.0</string>
+    <key>NSPrincipalClass</key>
+    <string>NSApplication</string>
+    <key>NSHighResolutionCapable</key>
+    <true/>
+    <key>NSSupportsAutomaticGraphicsSwitching</key>
+    <true/>
+    <key>CFBundleDevelopmentRegion</key>
+    <string>en</string>
+    <key>CFBundleAllowMixedLocalizations</key>
+    <true/>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>MSHV needs microphone access to capture audio from your radio for FT8/FT4/CW/JT65 decoding.</string>
+    <key>NSCameraUsageDescription</key>
+    <string>MSHV does not use the camera; this entry is a Qt requirement when QtMultimedia is linked.</string>
+</dict>
+</plist>

@@ -1,0 +1,764 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head>
+	<meta http-equiv="CONTENT-TYPE" content="text/html; charset=utf-8"><title></title>	
+	<meta name="GENERATOR" content="OpenOffice.org 2.3  (Linux)">
+	<meta name="CREATED" content="20090429;8114000">
+	<meta name="CHANGED" content="20090609;9565800">
+	<style type="text/css">
+	<!--
+		@page { size: 8.27in 11.69in; margin: 0.79in }
+		P { margin-bottom: 0.08in }
+		TD P { margin-bottom: 0.08in }
+	-->
+	</style></head><body dir="ltr" lang="bg-BG">
+
+<table cellpadding="0" cellspacing="8" width="600">
+  <tbody><tr>
+    <td width="610">
+      <div style="text-align: center;">
+        <div align="center">
+          <h3>MSHV</h3>
+          
+      
+      <h3><span lang="en"><strong>Developed by LZ2HV - Christo</strong></span><br>
+            <strong><span lang="en">Tested by SP9HWY - Jurek and G0LFF - Dick<br>
+            Ideas about appearance OZ2M - Bo<br>
+            Linux binaries OZ1PIF - Peter, SK<br>
+			Linux and ARM binaries G8JVM - Richard<br>
+			Linux openSUSE binaries DL8FCL - Walter<br>
+			macOS binaries VU2CPL - Manoj<br>
+            Russian interface R5WM - Vladimir, SK<br>
+			Russian interface RU4NG - Igor<br>
+			Translations:<br> 
+			Chinese Simplified and Traditional, VR2UPU - SZE-TO Wing<br>
+			Spanish and Catalan, EA3KE - Toni Olmo<br>
+			Portuguese, CU3AK - Jaime Eloy<br>
+			Romanian, YO3JW	- Pit Stefan Fenyo<br> 
+			Danish, 5P1KZX - Michael<br> 
+			Polish, SP5QWB - Bartek<br>
+			French, ON6DP - Paul<br>
+			Brazilian Portuguese, PP7CJ - Crezivando Junior<br>
+			Norwegian, LA3QMA - Kai Gunter Brandt<br>
+			Italian, IW4ARD - Gianni Matteini<br>
+			Czech, OK1ABB - Miroslav Skoda
+			</strong></h3>
+			
+
+			
+        </div>
+      </div>
+      <blockquote>
+	   
+	        <div><strong>
+			Acknowledgements to K1JT Joe Taylor and WSJT Development Group.<br> 
+            The algorithms, source code, 
+	        look-and-feel of WSJT-X and related programs, and protocol specifications for the modes FSK441, FT8, 
+	        JT4, JT6M, JT9, JT65, JTMS, QRA64, ISCAT, MSK144, are Copyright © 2001-2017 by one or more of the following authors: 
+	        Joseph Taylor, K1JT; Bill Somerville, G4WJS; Steven Franke, K9AN; Nico Palermo, IV3NWV; Greg Beam, KI7MT; 
+	        Michael Black, W9MDB; Edson Pereira, PY2SDR; Philip Karn, KA9Q; and other members of the WSJT Development Group.<br>
+			Acknowledgements to IU8LMC, Martino - ARI Caserta for FT2 mode.
+            </strong></div>
+	  
+	  
+        <p><span id="result_box10" lang="en">The
+          program was borrowed from the open source software K1JT. Only decoders and generators were used from K1JT
+          - WSJT and were rewritten to C ++. <span id="result_box11" lang="en">Almost the same location of controls was used   for easy operation</span>.
+          <span id="result_box4" lang="en">The software is fully compatible with the modes in WSJT software. </span>The visual interface is QT4.6.8. All required libraries are compiled
+          statically and are embedded in the body of the software. Additional libraries</span> are not necessary. <span id="result_box38" lang="en">All
+settings and configurations happen immediately and do not need to be
+restarted, for example changing the sound settings or rig control.</span></p>
+      </blockquote></td>
+  </tr>
+    <tr>
+      <td><h3 ;="" align="center"><span style="font-weight: bold; text-align: center;">Information:</span></h3>
+        <ul>
+          <!--<div><strong>Authors of the protocols are: K1JT Joe Taylor, and K9AN Steven Franke</strong></div>-->
+          <li>MSK
+For meteor scatter. Message frame duration is 72 ms and with Sh option
+20 ms. Character transmission rate for standard messages is as high as
+250 cps.</li>          
+          <li>JTMS For meteor scatter. Character transmission rate 197 cps.</li>
+          <li>FSK441 For meteor scatter. Character transmission rate 147 cps.</li>
+          <li>FSK315 For meteor scatter. Character transmission rate 105 cps.</li>
+          <li>ISCAT Optimized for meteor and ionospheric scatter at 6 meters. Character transmission rate 16.15 or 32.3 cps.</li>
+          <li>JT6M Optimized for meteor and ionospheric scatter at 6 meters. Character transmission rate 14.4 cps.</li>
+          <li>FT4 Designed for HF contesting.</li>
+		  <li>FT8 Designed for fast tropospheric QSOs.</li>
+          <li>JT65 VHF/UHF For EME and troposcatter.</li>
+		  <li>Q65 For ionospheric scatter, tropospheric scatter, rain scatter, TEP, and EME.</li>
+          <li>PI4  PharusIgnis4 A digital modulation (MGM) for beacon purposes.</li>
+        </ul>        </td>
+    </tr>
+  <tr>
+    <td>
+      <div ;="" font-weight:="" bold;="" align="center">
+        <h3><span class=""><strong>System Requirements:</strong></span></h3>
+      </div>
+      <ul>
+        <li>          SSB transceiver and antenna for one
+          or more VHF/UHF/SHF
+          bands.        </li>
+        <li>          Computer running the Microsoft
+          Windows Xp,7,8,10,11 32
+          or 64 Bit.        </li>
+        <li>For Linux QT5.6.3, Alsa and PulseAudio librarys.</li>
+        <li>          1 GHz or faster CPU
+          and 512 MB of available RAM.        </li>
+        <li>          The monitor with  minimum resolution 1024x768 or for notebooks 1366x768  (more is better). </li>
+        <li>          Computer-to-radio interface using a serial port for
+          T/R switching, or VOX control.        </li>
+        <li>          Audio input and output
+          devices supported by the operating
+          system (Sound card full duplex).        </li>
+        <li>          Audio or equivalent USB
+          connections between transceiver and computer.        </li>
+        <li>          A means for synchronizing the computer clock
+          to UTC within
+          ±1 s.</li>
+      </ul>      </td>
+    </tr>
+  <tr>
+    <td><h3 ;="" align="center"><strong>Installation:</strong></h3>
+      <div align="left">
+        <ul>
+          <li>No need for special installation, just extract
+            the archive file with its  containing folder wherever you want in the PC. </li>
+          <li>Recommended place is a non Operating System
+            drive, for example if OS is in C:\ &nbsp;extract into the D:\MSHV_XXX .</li>
+          <li> Starting software from the *.exe file or create a
+            shortcut on the desktop. Do not copy .exe file to
+            desktop.</li>
+          <li>If
+you have an old version of software, please delete the existing
+shortcut on the desktop if there is one. Extract the archive file with
+its containing folder and then create a new shortcut on the desktop. If
+you no longer need the old version you can delete it.</li>
+        </ul>
+      </div></td>
+    </tr>
+  <tr>
+    <td ;="" align="center"><h3><strong>Configuration of
+      software:</strong></h3></td>
+    </tr>
+  <tr>
+    <td><ul>
+      <li><strong>On menu Options - Sound Settings and Display Refresh Speed</strong><strong></strong></li>
+      <blockquote>
+        <p><br>
+          <img src="settings.png" alt=""></p> 
+      </blockquote>
+      <ul>
+        <li>
+          
+          Configure your sound card input
+          settings and sound card output settings, choose Input Channel Settings left or right.</li>
+        <li><span lang="en">Refresh
+function display is made for slow computers. If you use Display Refresh
+Speed, the update of the displays will vary in speed. <span id="result_box40" lang="en">This reduces the load on the CPU</span>.</span></li>
+        <li>Level Meter Refresh Speed, slows down the Level Meter update.</li>
+      </ul>
+    </ul>      </td>
+    </tr>
+  <tr>
+    <td><ul>
+      <li><strong>On menu Options - Interface Control</strong></li>
+      <blockquote>
+        <p><img src="rigcontr.png" alt=""></p>
+      </blockquote>
+      <ul>
+        <li>Interface Control widget contains two communication ports,the first for CAT and PTT, the second only for PTT, if necessary.</li>
+        <li>Configure PTT settings via RTS, DTR or Via CAT Command default is RTS. </li>
+        <li>Test with button Start Ptt Test.</li>
+        <li>Tx Watchdog, use to prevent your transmitter from sending countless messages.</li>
+      </ul>
+    </ul>      </td>
+    </tr>
+  <tr>
+    <td><ul>
+      <li><strong>On menu Options - Macros</strong></li>
+    </ul>
+      <blockquote>
+        <blockquote>
+          <p><img src="macros.png"></p>
+          </blockquote>
+      </blockquote>
+      <div style="margin-left: 40px;">        
+        <ul>
+          <ul>
+            <li>Setup My  Call, Grid Locator and TX macros </li>
+          </ul>
+        </ul>
+      </div>
+      <div style="margin-left: 40px;">  
+        <blockquote>
+          <ul>
+            <li>Valid Macros are:</li>
+            <ul>
+              <li>MyCall = %M                  </li>
+              <li>HisCall = %T                  </li>
+              <li>RST = %R </li>
+              <li>4 CharactersLocator = %G4 example = KN23                   </li>
+              <li>6 CharactersLocator = %G6  example = KN23SF</li>
+              <li>Random QRG = %QRG</li>
+              <li>Serial Number = %N</li>
+            </ul>
+          </ul>
+        </blockquote>
+        </div>
+<div style="margin-left: 40px;">
+  <ul>
+    <ul>
+      <li><span id="result_box32" lang="en">Radio Buttons </span> Kilometers, Miles change distance units.</li>
+      <li>Radio Buttons Region 1, Region 2, Region 3 returns default macros by region.</li>
+      <li><span id="result_box13" lang="en">Radio Button Report  returns default macros which contain the report.</span></li>
+      <li><span id="result_box23" lang="en">Radio Button Grid  returns default macros which contain the grid locator.</span></li>
+      <li>Radio Button RSQ And Serial Number  returns default macros which contain the RSQ report and serial number.</li>
+      <li>Button GEN  MESSAGE immediately generates text messages for transmitting.</li>
+      <li>Button SET DEFAULT MACROS returns default macros.</li>
+    </ul>
+    </ul>
+</div>
+      </td>
+    </tr>
+  <tr>
+    <td><ul>
+      <li><strong>On menu Options - Radio And Network Configuration</strong></li>
+      <blockquote>
+        <p><img src="radio_net.png"></p> 
+      </blockquote>
+      <ul>
+        <li> Tick "Enable PSK Reporter Spotting" in  PSK Reporter Settings box to enable spotting.</li>
+        <li>In  this box, you can change server and port, if needed.</li>
+        <li>In the table below it,  you should double click on every row to set you personal radio informations.</li>
+      </ul>
+    </ul>      </td>
+    </tr>  
+  <tr>
+    <td><ul>
+      <li><strong>On menu Options</strong></li>
+      <blockquote>
+        <p><img src="options.png"></p> 
+      </blockquote>
+      <ul>
+        <li>Play Control directly accesses  the Windows Play Control mixer.<br>
+          <span id="result_box2" lang="en">When transmitting, this control  sets an appropriate level for your transmitter</span>.      </li>
+        <li>Record Control as Play Control directly accesses  the Windows Record Control mixer. <span id="result_box" lang="en">With this control   you adjust the noise level from the
+          receiver to reach  0db strength, while monitoring the indicator to the right of the software. It is important
+          for proper decoding</span>. </li>
+        <li>Radio And Network Configuration Menu  you have to start PSK Reporter Spotting.</li>
+        <li>Text Highlight marks specific word(s) in message.</li>
+        <li>Using
+the Generate Messages For Test Tones creates specific messages that
+generate different tones with the help of which you can set the levels
+of transmission. The tones are within the 100Hz - 3000Hz, for example,
+if you type in a message @1000=1000Hz, there are special letter
+combinations @A=882Hz, @B=1323Hz, C@=1764Hz, @D=2205Hz, which are
+approximately the frequencies on which the software runs.</li>
+        <li>Menu
+"Time Synchronization" is a shortcut to Data Time Properties. Follow
+the instructions on the info window to synchronize computer time. For
+this purpose, you need to be connected to the Internet.</li>
+        <li>"Monitor ON At Startup"  Start monitor automatically at software startup.</li>
+        <li>&quot;View JT65 DF Axis On Display&quot;. Change display scale to show DF in mode JT65.</li>
+        <li>&quot;Astronomical Data&quot; View view full data for the Moon.</li>
+      </ul>
+    </ul>      </td>
+    </tr>
+  <tr>
+    <td><h3 ;="" align="center"><strong>Functions of
+      Software:</strong></h3>
+      <ul>
+        <li><strong style="font-weight: bold;">On menu File</strong></li>
+        <ul>
+          <li><span id="result_box3" lang="en">"<strong style="font-weight: bold;">Open</strong>"
+            You can open files previously stored from the software, for decoding
+            and display. The software opens files with the extension *.WAV, </span>sample rate  11025 KHz, mono.</li>
+          <li><strong>Drag and Drop</strong> function. You can drag and drop a *.wav file from Windows Explorer to <strong>Display 1</strong> and they will automatically open and decode. You can drag and drop *.wav files only one by one.</li>
+          <li>"<strong>View Log</strong>" You can open open simple log program.</li>
+          <li>"<strong>Overwrite Locator Database</strong>"
+            Overwrite the existing locator database. For example, when a new
+            software version is released, you can overwrite database from your old
+            software. The locator database are in the file
+            MSHV_XXX/settings/database/msloc_db.dbmh of your old version.</li>
+          </ul>
+      </ul>      </td>
+  </tr>
+  <tr>
+    <td><ul>
+      <li><strong>On menu Palette:</strong></li>
+      <blockquote>
+        <p><img src="palette.png"></p>
+      </blockquote>
+      <ul>
+        <li>Palette menu  changes the colors of the decoder displays. </li>
+      </ul>
+    </ul></td>
+  </tr>  
+  <tr>
+    <td><ul>
+      <li><strong>On menu Mode</strong>      
+        <blockquote>
+          <p><img src="mode.png"></p>
+          </blockquote>
+        </li>
+      <ul>
+        <li>Mode menu changes the working type. </li>
+        </ul>
+      </ul>      </td>
+  </tr>
+  <tr>
+    <td><ul>
+      <li><strong>On Menu Decode</strong>
+        <blockquote>
+        <p><img src="menu_decode.png"></p>
+      </blockquote>
+      </li>
+        <ul>
+          <li>Fast MSK144, is used for slow CPU speed PC.</li>
+          <li>Norman MSK144, is used for more sensitive decoding.
+            </li>
+          <li>Deep MSK144, is used for fast CPU PC.
+            </li>
+          <li>MSK144 RX Equalization Off.
+            </li>
+          <li>MSK144 RX Equalization Static, static coefficients for equalization.
+            </li>
+          <li>MSK144 RX Equalization Dynamic, coefficients for equalization from you receiver.
+            </li>
+          <li>MSK144 RX Equalization S And D, Static and Dynamic together.
+            </li>
+          <li>Single Decoded Signal JT65, is used for synchronize only one signal.
+            </li>
+          <li>Max 4,8,16,32 Decoded Signals JT65, is used for multy signals synchronization. 
+            </li>
+          <li>Tune Decoder Aggressive Level and Deep Search Aggressive Level.</li>
+          <li>Switch VHF/UHF and HF features for JT65 decoder.</li>
+          <li>Enable Averaging JT65, is used for very weak signals need minimum 3 periods to activate average decoding.</li>
+          <li>Enable Deep Search JT65 recommended only for VHF/UHF bands.</li>
+          <li>Enable AP switch for a priory decoding features.</li>
+        </ul>
+      </ul>
+      </td>
+  </tr>
+  <tr>
+    <td><ul>
+      <li><strong>Displays area</strong>
+        <p><img src="display.jpg"></p>
+      </li>
+      <ul>
+        <li><span id="result_box5" lang="en">The
+          program contains two displays which show the received signal.
+          When  display 1 is filled for the period of 30 seconds the
+          information is automatically moved to  display 2. Then display 1 starts
+          filling again with new information. A line graph for the time in seconds is being shown at the t<span id="result_box7" lang="en">op
+            of the display.  The middle part of the display
+            presents the signal as a waterfall. The graph below presents the signal strength
+            indicator.</span></span></li>
+        <li><span lang="en">To decode the received signals from the display,  click with the mouse in the center of the received ping.</span><span id="result_box6" lang="en">
+          When you press the display,  two lines appear that show the region of decoding. Pressing
+          the right mouse button makes the region  twice larger than  pressing the left one. No
+          matter which display you decode, both are always active.</span></li>
+        <li><span id="result_box8" lang="en">To
+the right there is a slider to adjust display settings. Please, in the
+Windows Record Control mixer, first adjust the noise level from the
+receiver by positioning the stretch indicator at 0db strength.
+Secondly, adjust the displays using the Tune Displays slider to show
+dark blue color with small green dots, as shown in the picture above.</span></li>
+        <li><span lang="en">Under each display there is a button to help  you  save
+          the data in file. Files are stored in the directory </span>RxWavs. <span id="result_box9" lang="en">The
+            button displays the file name. The file name contains information
+            about the correspondent's callsign, working type, year and time.</span>
+There is an exception if the callsign is (/), it is replaced with the
+word SLASH, for example LZ2HV/P will be saved as LZ2HV_SLASH_P. This is
+necessary because (/) means the creation of computer path to directory
+and you cannot save the file. </li>
+        <li>For small display
+resolutions (eg. 800x600 pix) in lefthand display area, button 2D/1D -
+changes application to work with two or one displays or shortcut F10
+for this function, and button D1/D2 - switches displays, if working on
+one display or shortcut F11 for this function.</li>
+      </ul>
+    </ul>      </td>
+    </tr>
+  <tr>
+    <td><ul>
+      <li><strong>Info Panel</strong>      
+        <p><img src="infop.png"></p>
+      </li>
+      <ul>
+        <li><span id="result_box12" lang="en">In
+          the information panel indications of the state of the
+          software are placed.</span></li>
+        <li><span lang="en">Label mode shows the working type of the software.</span></li>
+        <li><span lang="en">Checkbox Auto Decode (Auto Dec) is used
+          for decoding automatically after receiving period or opening a file. Can be activated or not.</span></li>
+        <li>Checkbox Real-Time Decode (RT Dec) is used
+          for decoding in real-time. Can be activated or not.</li>
+        <li><span lang="en">Decode label indicates when the software is busy
+          decoding if red light is currently on.</span></li>
+        <li><span id="result_box14" lang="en">Label Receive in green color means that the software is currently recording</span>.</li>
+        <li><span id="result_box15" lang="en">Txing label shows the  current text to  be transmitted and its red color indicates that it is  currently being transmitted.</span></li>
+        <li>Strength indicator<span id="result_box16" lang="en"> of the received signal must be set so that the normal noise of the radio shows 0db,</span> for example <img src="smiter.png">.</li>
+      </ul>
+    </ul>      </td>
+    </tr>
+  <tr>
+    <td><ul>
+      <li><strong>Display List</strong>
+        <p><img src="list.png"></p>
+      </li>
+      <ul>
+        <li><span id="result_box17" lang="en">The
+display shows the message being decoded . You can copy the message as
+you left-click once to select the row, then Ctrl+C to copy info and
+then with Ctrl+V you can paste it to put into the text document.<span id="result_box18" lang="en"> The copied message is specially formatted, for example, </span></span>FSK441 103330 11.6 s 320 ms 7 dB 26 -18 Hz &gt; ON5VW R26 R26 SP9HWY ON5VW. </li>
+        <li>If
+you want to add TX RPT, just double click the row from column dB or
+Rpt. If you double-click the row from column Messages with the left
+mouse button, you will be able to enter the selected row and then again
+if you press twice in the middle of the continuous text, it will
+automatically be transferred into the cell TO RADIO, same refers to
+grid locator.</li>
+      </ul>
+    </ul>      </td>
+    </tr>
+  <tr>
+    <td><ul>
+      <li><strong>Buttons Panel</strong>
+        <p><img src="buttons.png"></p>
+      </li>
+      <ul>
+        <li><span id="result_box20" lang="en">Buttons  control the receiving and transmission of the software</span>.<span id="result_box21" lang="en">
+          The  special thing about them is that once  the monitor is on, it does not stop until
+          you disconnect it  with the stop button. <span id="result_box22" lang="en">In AUTO IS ON, if you press the STOP TX button, AUTO IS ON will be canceled and will be changed to AUTO IS OFF</span>.</span></li>
+        <li>Button RESET QSO clear labels TO RADIO and HIS LOCATOR, and updates the Text Messages Panel.</li>
+        <li><span lang="en">Button CLEAR MESSAGES erases all messages in the message list display.</span></li>
+        <li>Button TUNE TX 1000 Hz tone for tuning transmitter.</li>
+      </ul>
+    </ul>      </td>
+    </tr>
+  <tr>
+    <td><ul>
+      <li><strong>Info Clock, Database  Panel
+and Add to log QSOs   </strong>
+        <blockquote>
+  <p><img src="clock_db.png"></p>
+        </blockquote>
+      </li>
+      <ul>
+        <li><span id="result_box24" lang="en">This Panel  displays  your RIG CAT frequency (if have CAT control), callsign, locator, date, time and the database  for other stations and their locators. </span><span id="result_box25" lang="en">On entering the correct locator, the software calculates the direction and distance to the correspondent.</span> <span id="result_box26" lang="en">When
+          you enter the callsign of your correspondent, if it is in the database,
+          it will be displayed next to the LOOKUP button, after pressing the LOOKUP button, the locator will  be
+          automatically placed in the box LOCATOR. Then you will get the data
+          for the direction and distance to the correspondent.</span> <span id="result_box27" lang="en">If you know the exact locator correspondent, you can enter it into the database manually by pressing ADD button   .</span></li>
+        <li>Widget CAT control display you RIG frequency. If RIG is connected to the application, the widget displays frequency, and if RIG is disconnected, after 12-13s. the application returns to default settings. If you switch to Band menu, the application changes the RIG frequency. But if you change Mode,  this will not happen. If you want to return to default settings, press button &quot;F&quot;.</li>
+        <li>The
+correspondent's callsign appears in TO RADIO. You can add or copy it
+onto the list manually or by double-clicking in the list.</li>
+        <li>The button ADD TO LOG adds QSO in the simple log program. You can view the log from the file menu or press Ctrl+L.</li>
+        <li>You can set the receiving report in the RX RPT box .</li>
+        <li>Monitor
+Radio 1 (R1:), Monitor Radio 2 (R2:) option to monitor others, if they
+support "MSK144 + Sh" option. In all modes, these labels work as "Text
+Highlight" option as well.</li>
+      </ul>
+    </ul></td>
+    </tr>
+  <tr>
+    <td><ul>
+      <li><strong>Squelch Df Callsign Rst Tx Panel</strong>
+        <blockquote>
+          <p><img src="df_auto.png"></p>
+        </blockquote>
+      </li>
+      <ul>
+        <li><span id="result_box28" lang="en">Squelch is displayed on the top and it can be adjusted as recommended  according to default value.</span></li>
+        <li><span lang="en">DF indicates possible differences in frequencies in order to find correspondent signal </span>and it can be adjusted as recommended  according to default value.</li>
+        <li><span lang="en"><span lang="en">RST or RSQ is the estimation of the signal</span></span>.</li>
+        <li>TX SN contest serial number.</li>
+        <li><span lang="en">Radio buttons TX FIRST TX SECOND set the period of transmission</span>.</li>
+        <li><span lang="en">Button GEN MSG  generates the messages from macros and enters texts to the TX messages.</span></li>
+        <li><span lang="en">Button
+AUTO IS ON / OFF controls if the software runs in automatic mode or
+not. In AUTO IS ON mode, it begins to work in synchronized pre-defined
+period (30 s).</span></li>
+        <li>RANDOM QRG is the offset for random contacts in 3 digits max.</li>
+        <li>ZAP
+function: Filter out birdies (narrowband signals of approximately
+constant amplitude) before attempting to decode. This function requires
+10s. of receiving period before beginning to work properly. The
+filtering period does not show in the display area.</li>
+        <li>TX/RX 30s is a period of work 5s, 10s, 15s and 30s. </li>
+        <li>Sh option in MSK144 mode (e.g. MSK144 + Short Reporting).</li>
+        <li>Label "RXF/RXS" - when  the Label "RXF/RXS" or key F9 is pressed, RXing works only during the first or second period.</li>
+      </ul>
+    </ul></td>
+    </tr>
+  <tr>
+    <td><ul>
+      <li><strong>Text Messages Panel</strong>
+        <blockquote>
+          <p><img src="text_msg.png"></p>
+        </blockquote>
+        <ul>
+          <li><span id="result_box35" lang="en">All text  messages  long 1-28
+            characters are in
+            this panel. You can write  them by hand or generate them by macros. </span><span id="result_box36" lang="en">When you press any of the buttons TX1... TX7  its message transmission    begins immediately.</span></li>
+          <li><span lang="en">When changing the radio buttons, the message is not transmitted
+            immediately and only shows which of them will be transmitted in the next period.</span></li>
+          <li>Slider "RX Level Correction" change input sound card level +/-12dB.</li>
+          <li>Slider "TX Level Correction" change output sound card level.</li>
+        </ul>
+        </li>
+    </ul>      </td>
+    </tr>
+    
+    
+    
+    
+    
+    
+    
+    <tr>
+    <td><ul>
+      <li><strong>Multi Answering Auto Seq Protocol</strong>
+      
+        <blockquote>
+          <p><span id="result_box35" lang="en">Switch application to FT8 mode and go to menu options then check "Multi Answering Auto Seq Protocol FT8".
+            In bottom right-hand corner you will see the tabs Queue, Now and Settings.</span><span id="result_box36" lang="en"> </span></p>
+        </blockquote>
+        <ul>
+          <li><strong>Tab Settings:</strong></li>
+        </ul>      
+      
+        <blockquote>
+          <p><img src="mam01.png"></p> 
+          <p><span id="result_box35" lang="en">In the Settings tab there is spin box "Queue Limit:". Its range is from 1 to 50, this is an all queued users.
+            The next spin box is "TX Slots:". Its range is from 1 to 5, this is the number of your emitting signals (TX). <strong><span style="color:#B22222"><strong>It is recommended that you use only one TX Slot if you are not a DX expedition.</strong></span><strong> </strong></p>
+          <p><img src="mam05.png"></p>
+          <p>The next spin box is "Max Time:". Its range is from 1 to 10 min, this is a how many times the application responds to a single user, if there is no response from the user.
+            The next combo box is CQ types: CQ, CQ DX........Free CQ. To use the Free CQ option, first write a message, then press the button (USE). A valid message must to contain a valid call sign.</p>
+          <p><img src="mam06.png"></p> 
+          
+          <p>
+          Check box "No Dupes": The application checks for calls for possible duplicate QSOs. <br/>
+          Check box "SMsg": Allows TXing special message e.g.(OZ2M RR73; R5WM &lt;LZ2HV&gt; +05).<br/>
+          Check box "Auto Sort": Auto sorting of Queued is activated if Dist column header is marked.<br/>
+          Check box "CQ on free slot": Allows TXing CQ on free slot.<br/>
+         
+          The next two buttons are intended for clearing of users Queued list and Now list.</p>
+        </blockquote>
+        
+        
+            <ul>
+              <li><strong>   
+                Tab Now:
+              </strong></li>    
+            </ul>         
+        
+      
+   <blockquote>
+     <p><img src="mam02.png"></p> 
+     <p>Tab Now contains the users you are currently working with.</p>
+   </blockquote>        
+      
+            <ul>
+              <li><strong>   
+                Tab Queue:
+              </strong></li>    
+            </ul>    
+        
+        
+        
+         <blockquote>
+           <p><img src="mam03.png"></p>
+           <p>   
+             Tab Queue contains the users waiting for a response from you. You can sort them by call or distance by means of clicking on the header column .
+           </p>
+         </blockquote>  
+        
+        
+        <ul>
+          <li><strong>   
+            Working:
+            </strong></li>    
+        </ul>      
+        
+       <blockquote>
+         <p>   
+           To start working, you need to set up everything in the Settings tab, and then find room for your CQ by a single-clicking on waterfall and pressing the TX=RX button (small red markers in the top frequency scale).
+           </p>
+         <p><img src="mam04.png"></p>
+         <p>   
+           Then, you need to unlock TX and RX (uncheck LTR), and, by a single click, adjust yout RX frequency slightly up.</p></br>
+           <strong>IMPORTANT:</strong> the green horizontal line in the top frequency scale is your receiving bandwidth. If you have to change it, use the "DF Tol" spin box.
+           Then, change Auto from off to on and application starts working.
+           If you have to switch fast between "Multi Answering Auto Seq Protocol" and normal work protocol, press shortcut Ctrl+` (Switch to US Keyboard, for Ctrl+`, the button is below the Escape button).
+         </p>
+         <p>  After QSO application finishes, it will automatically save QSO into the Log. In the Log widget, in Column comment, you will see the MA QSO abbreviation. In this protocol, this is the method for marking QSO connection type.   
+           
+         </p>
+       </blockquote>  
+       
+       
+       
+       <span style="color:#B22222"><strong>It is recommended that you use only one TX Slot if you are not a DX expedition.</strong>  </span>
+        
+        
+        
+        <ul>
+          
+        </ul>
+        
+        
+        
+        
+        </li>
+    </ul>      </td>
+    </tr>
+    
+    
+    
+    
+    
+    
+    
+    
+  <tr>
+    <td><ul>
+      <li><strong>Log program</strong>
+        <ul>
+  <li>In the simple log program you can add, edit, delete, find
+and sort QSOs. You can set the receiving report in the RX RPT box .
+From menu Band, you can choose the band so it is correctly written in
+the simple log. Sorting of logs in simple log can be done by clicking
+on the headers of the columns. To return to the default view, click the
+Default Sort button.</li>
+  <li>From the "Add Log" menu <span id="result_box29" lang="en">you can add contacts to your log</span>. <span id="result_box30" lang="en">For example, when a new software version is released, you can add the contacts from your old</span> software. <span id="result_box31" lang="en">The contacts  are</span> in the file  MSHV_XXX/log/mshv.edil of your old version.</li>
+  <li>In
+Log Menu there is Export QSOs in ADIF format ("Export Selected In ADIF"
+or "Export All In ADIF"). Destination of exported files is in ExportLog
+directory.</li>
+</ul>
+      </li>
+      </ul>      </td>
+  </tr>
+  <tr>
+    <td><ul>
+      <li><big align="left"><strong>Keyboard Shortcuts</strong><strong></strong></big></li>
+      <ul>
+        <li>Ctrl+H MSHV Help</li>
+        <li>Ctrl+K Keyboard Shortcuts </li>
+        <li>Ctrl+O File Open </li>
+        <li>Alt+F4 Exit </li>
+        <li>Ctrl+S Sound Settings</li>
+        <li>Ctrl+I Interface Control </li>
+        <li>Ctrl+M Macros</li>
+        <li>Ctrl+P Play Control</li>
+        <li>Ctrl+R Record Control </li>
+        <li>Ctrl+L View Log</li>
+        <li>Alt+L Add Qso To Log</li>
+        <li>Alt+M Start Monitor </li>
+        <li>Alt+S Stop Monitor </li>
+        <li>F1 to F7 Tx1 to Tx7 </li>
+        <li>Esc TX Stop</li>
+        <li>Ctrl+A Toggle Auto On/Off</li>
+        <li>Ctrl+G Generate Messages</li>
+        <li>Ctrl+1 Save Dislay 1 Data as *.WAV</li>
+        <li>Ctrl+2 Save Dislay 2 as  Data *.WAV</li>
+        <li>Ctrl+Z Toggle ZAP On/Off</li>
+        <li>F12 Screenshot</li>
+        <li>F9 RX Only First Or Second Period</li>
+        <li>F10 Switches number of displays from two to one and vice versa</li>
+        <li>F11 Switches displays, if working on one display</li>
+        <li>F8 View Spot Dialog.</li>
+        <li>Ctrl+` Multi Answering Auto Seq Protocol FT8 (<span class="rteindent2">switch to US keyboard</span>)</li>
+		<li>Ctrl+Q Multi Answering Auto Seq Protocol Standard FT8/4</li>
+		<li>Ctrl+&lt; DF Tol Down (FT8/4,JT65,PI4 Bandwidth)</li> 
+		<li>Ctrl+&gt; DF Tol Up (FT8/4,JT65,PI4 Bandwidth)</li> 
+		<li>Ctrl+Click On waterfall adjust RX and TX frequencies together FT8/4</li> 
+		<li>Shift+Click On waterfall adjust TX frequency FT8/4</li> 
+		<li>Ctrl+W Show/Hide Waterfall</li> 
+		<li>Ctrl+T Show/Hide TX Widget</li> 
+		<li>Ctrl+ = Band Up</li> 
+		<li>Ctrl+ - Band Down</li> 
+      </ul>
+    </ul>      </td>
+  </tr>
+  <tr>
+    <td>
+
+        <div align="center">
+          <h3><big><strong>Directories and files:</strong></big></h3>
+        </div>
+        <ul>
+          <li><strong>Directory AllTxtMonthly</strong>      
+          </li>
+          <ul>
+            <li><span lang="en">Text files for each month 
+              are collected in directory AllTxtMonthly   containing all TX and
+              RX messages. You can open them with text editor and search content from
+              your connections.</span></li>
+            <li><span lang="en"> Do not delete the directory. </span></li>
+            <li><span lang="en">You can delete text files periodically if they are no longer
+              needed. </span></li>
+          </ul>
+        </ul>        </td>
+    </tr>
+    <tr>
+    <td>      <ul>
+        <li><strong>Directory ExportLog</strong>
+          <ul>
+            <li><span lang="en">Do not delete the directory ExportLog and its content. It contains all exported log</span> files.</li>
+          </ul>
+        </li>
+      </ul></td>
+    </tr>
+  <tr>
+    <td>      <ul>
+        <li><strong>Directory log</strong> 
+          <ul>
+            <li><span lang="en">Do not delete the directory settings and content. They keep you log data</span>.</li>
+          </ul>
+        </li>
+      </ul></td>
+    </tr>
+  <tr>
+    <td><ul>
+      <li><strong>Directory RxWavs</strong>        
+        <ul>
+          <li><span lang="en">It
+            contains all recorded files during all your work.</span></li>
+          <li><span lang="en"> Do not delete the
+            directory. </span></li>
+          <li><span lang="en">Periodically,
+            you can delete files that you do not need. </span></li>
+        </ul>
+      </li>
+      </ul></td>
+  </tr>
+  <tr>
+    <td><ul>
+      <li><strong>Directory Screenshots</strong>
+      </li>
+      <ul>
+        <li><span lang="en">Do not delete the directory. It
+          contains all screenshot files during all your work</span>.</li>
+        <li>You can delete screenshot files periodically if they are no longer
+          needed. </li>
+      </ul>
+    </ul></td>
+  </tr>
+  <tr>
+    <td>      <ul>
+        <li><strong>Directory settings</strong>
+          <ul>
+            <li><span lang="en">Do not delete the directory settings and content. They keep all software settings</span>.</li>
+          </ul>
+        </li>
+      </ul></td>
+    </tr>
+</tbody></table>
+
+
+</body></html>

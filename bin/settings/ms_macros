@@ -1,0 +1,21 @@
+[ms_macros]
+def_dist_unit=0
+macr_reg=0
+macr_rep_grd=0
+macr_rep_contest=0#1D NB#DX#0
+macr_my_call=LZ2HV
+macr_my_loc=KN23SF
+macr_tx1=%T %M
+macr_tx2=%T %M %R %R
+macr_tx3=%T %M R%R R%R
+macr_tx4=RRRR RRRR %M
+macr_tx5=73 %M
+macr_tx6=CQ %M
+macr_tx7=CQ %QRG %M
+mac_ctx1=%T %M %G4
+mac_ctx2=%T %M %R
+mac_ctx3=%T %M R%R
+mac_ctx4=%T %M RR73
+mac_ctx5=%T %M 73
+mac_ctx6=CQ %M %G4
+mac_ctx7=CQ %QRG %M %G4

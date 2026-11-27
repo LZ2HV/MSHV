@@ -1,0 +1,25 @@
+<!DOCTYPE RCC><RCC version="1.0">
+                           <qresource> 
+						   <file>pic/up_press.png</file>
+                           <file>pic/up_rep.png</file>
+                           <file>pic/down_press.png</file>
+                           <file>pic/down_rep.png</file>
+                           <file>pic/1d_release.png</file>
+                           <file>pic/1d_press.png</file>
+                           <file>pic/2d_release.png</file>
+                           <file>pic/2d_press.png</file>  
+                           <file>pic/d1_release.png</file> 
+                           <file>pic/d1_press.png</file>
+                           <file>pic/d2_release.png</file>
+                           <file>pic/d2_press.png</file>     
+                           <file>pic/def_rep.png</file>
+                           <file>pic/def_press.png</file>
+                           <file>pic/clr_rep.png</file> 
+                           <file>pic/clr_press.png</file>  
+						   <file>pic/up_press_b.png</file>
+                           <file>pic/up_rep_b.png</file>
+                           <file>pic/down_press_b.png</file>
+                           <file>pic/down_rep_b.png</file>                                                                                       
+                           </qresource>     
+                           </RCC>
+

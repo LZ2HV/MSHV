@@ -1,0 +1,53 @@
+sh.exe ./configure --enable-static
+make
+--enable-sse
+sh.exe ./configure --enable-static --enable-float --enable-sse2
+
+sh.exe ./configure --enable-static --enable-float --enable-sse --with-our-malloc
+sh.exe ./configure --enable-static --enable-float 
+
+sh.exe ./configure --enable-static --enable-float --enable-threads
+
+
+2018 3.3.7
+Triabva da e  nai otpred "C:\mingw\bin"   WINDOWS PATH  C:\mingw\bin;C:\Program Files (x86)\Intel\iCLS Client\....................
+sh.exe ./configure --enable-static --disable-fortran --disable-debug
+CFLAGS -ffast-math -fno-trapping-math -funsafe-math-optimizations -freorder-functions -funroll-all-loops
+
+2018 3.3.7  in ver. 1.68
+last only this
+sh.exe ./configure --enable-static --disable-fortran --disable-debug
+make
+
+
+2019 3.3.8  in ver. 2.09
+for windows rename original mingw32-make.exe to make.exe then for MSHV make.exe to mingw32-make.exe
+sh.exe ./configure --enable-static --enable-threads --disable-fortran --disable-debug
+make
+
+
+2021 3.3.9  in ver. 2.56
+sh.exe ./configure --enable-static --disable-fortran --disable-debug --disable-dependency-tracking
+
+
+2021 3.3.10  in ver. 2.62
+sh.exe ./configure --enable-static --disable-fortran --disable-debug --disable-dependency-tracking
+make
+
+
+2023 3.3.10  in ver. 2.72
+sh.exe ./configure --enable-static --disable-fortran --disable-debug --disable-dependency-tracking --disable-alloca --with-our-malloc --with-incoming-stack-boundary=2 --enable-sse2
+make
+
+
+
+
+
+
+
+
+
+
+
+
+
